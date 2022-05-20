@@ -12,13 +12,13 @@ class HomeScreen extends StatelessWidget {
           actions: [
             IconButton(
                 onPressed: () {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                           builder: (context) => const LoginScreen()));
                 },
-                icon: Icon(Icons.logout)),
-            SizedBox(
+                icon: const Icon(Icons.logout)),
+            const SizedBox(
               width: 20,
             )
           ],
@@ -31,20 +31,20 @@ class HomeScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
+                  SizedBox(
                       width: MediaQuery.of(context).size.width,
                       child: Lottie.asset(
                           'asset/animation/30173-welcome-screen.json',
                           height: 250)),
-                  Text(
+                  const Text(
                     'Hey UserName',
                     style: TextStyle(fontFamily: 'Kodchasan', fontSize: 22),
                   ),
-                  Text(
+                  const Text(
                     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vitae aliquam augue. Fusce arcu lacus, lobortis sit amet porta quis, placerat eu libero. Curabitur interdum, orci quis consequat suscipit, lectus nunc laoreet nisl, vel malesuada nulla est eu augue. Ut vel risus ac dolor tempus rutrum sit amet vel mi. ',
                     style: TextStyle(fontFamily: 'Kodchasan', fontSize: 15),
                   ),
-                  Text(
+                  const Text(
                     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vitae aliquam augue. Fusce arcu lacus, lobortis sit amet porta quis, placerat eu libero. Curabitur interdum, orci quis consequat suscipit, lectus nunc laoreet nisl, vel malesuada nulla est eu augue. Ut vel risus ac dolor tempus rutrum sit amet vel mi. ',
                     style: TextStyle(fontFamily: 'Kodchasan', fontSize: 15),
                   )

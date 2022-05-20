@@ -34,218 +34,219 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                Container(
+                SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: Lottie.asset(
                         'asset/animation/83168-login-success.json',
                         height: 250)),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Form(
                     key: _formkey,
-                    child: Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Login',
-                                style: TextStyle(
-                                    fontFamily: 'Kodchasan',
-                                    fontSize: 40,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black54),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 25,
-                          ),
-                          Row(
-                            children: [
-                              Icon(Icons.alternate_email),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Expanded(
-                                  child: TextFormField(
-                                validator: (value) {
-                                  if (value!.isNotEmpty &&
-                                      emailController.text == email)
-                                    return null;
-                                  else if (value.isEmpty) {
-                                    return 'enter your email address';
-                                  } else
-                                    return 'email is incorrect';
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children:const [
+                            Text(
+                              'Login',
+                              style: TextStyle(
+                                  fontFamily: 'Kodchasan',
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black54),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 25,
+                        ),
+                        Row(
+                          children: [
+                            const Icon(Icons.alternate_email),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                                child: TextFormField(
+                              validator: (value) {
+                                if (value!.isNotEmpty &&
+                                    emailController.text == email) {
+                                  return null;
+                                } else if (value.isEmpty) {
+                                  return 'enter your email address';
+                                } else {
+                                  return 'email is incorrect';
+                                }
+                              },
+                              controller: emailController,
+                              decoration: const InputDecoration(
+                                  hintText: 'Email ID',
+                                  hintStyle:
+                                      TextStyle(fontFamily: 'Kodchasan')),
+                            )),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 13,
+                        ),
+                        Row(
+                          children: [
+                            const Icon(Icons.key),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                                child: TextFormField(
+                              validator: (value) {
+                                if (value!.isNotEmpty) {
+                                  return null;
+                                } else {
+                                  return 'enter your password';
+                                }
+                              },
+                              obscureText: true,
+                              controller: passwordController,
+                              decoration: const InputDecoration(
+                                  hintText: 'Password',
+                                  hintStyle:
+                                      TextStyle(fontFamily: 'kodachan')),
+                            )),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    isVisible = !isVisible;
+                                  });
                                 },
-                                controller: emailController,
-                                decoration: InputDecoration(
-                                    hintText: 'Email ID',
-                                    hintStyle:
-                                        TextStyle(fontFamily: 'Kodchasan')),
-                              )),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 13,
-                          ),
-                          Row(
-                            children: [
-                              Icon(Icons.key),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Expanded(
-                                  child: TextFormField(
-                                validator: (value) {
-                                  if (value!.isNotEmpty)
-                                    return null;
-                                  else
-                                    return 'enter your password';
-                                },
-                                obscureText: true,
-                                controller: passwordController,
-                                decoration: InputDecoration(
-                                    hintText: 'Password',
-                                    hintStyle:
-                                        TextStyle(fontFamily: 'kodachan')),
-                              )),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              TextButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      isVisible = !isVisible;
-                                    });
-                                  },
-                                  child: Text(
-                                    'Forgot Password?',
-                                    style: TextStyle(fontFamily: 'kodachan'),
-                                  ))
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              child: ElevatedButton(
-                                onPressed: () async {
-                                  if (!_formkey.currentState!.validate()) {
-                                    return;
-                                  }
-                                  prefs = await SharedPreferences.getInstance();
+                                child: const Text(
+                                  'Forgot Password?',
+                                  style: TextStyle(fontFamily: 'kodachan'),
+                                ))
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                if (!_formkey.currentState!.validate()) {
+                                  return;
+                                }
+                                prefs = await SharedPreferences.getInstance();
 
-                                  final pass = prefs.getString(password);
-                                 
-                                  if (emailController.text == email &&
-                                      pass == passwordController.text) {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                HomeScreen()));
-                                  }
-                                },
-                                child: Text('Log in ',
+                                final pass = prefs.getString(password);
+                               
+                                if (emailController.text == email &&
+                                    pass == passwordController.text) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const HomeScreen()));
+                                }
+                              },
+                              child: const Text('Log in ',
+                                  style: TextStyle(
+                                      fontFamily: 'kodachan', fontSize: 19)),
+                            )),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Visibility(
+                          visible: isVisible,
+                          child: Container(
+                            color: Color.fromARGB(255, 222, 221, 221),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                children: [
+                                  const Text(
+                                    'Validate Email',
                                     style: TextStyle(
-                                        fontFamily: 'kodachan', fontSize: 19)),
-                              )),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Visibility(
-                            visible: isVisible,
-                            child: Container(
-                              color: Color.fromARGB(255, 222, 221, 221),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      'Validate Email',
-                                      style: TextStyle(
-                                          fontFamily: 'Kodchasan',
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.black54),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Form(
-                                      key: _validateEmailform,
-                                      child: Row(
-                                        children: [
-                                          Icon(Icons.alternate_email),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          Expanded(
-                                              child: TextFormField(
-                                            controller:
-                                                emailValidatorController,
-                                            validator: (value) {
-                                              if (value!.isNotEmpty &&
-                                                  emailValidatorController
-                                                          .text ==
-                                                      email) {
-                                                return null;
-                                              } else
-                                                return 'enter valid email id';
-                                            },
-                                            decoration: InputDecoration(
-                                                hintText: 'Email ID',
-                                                hintStyle: TextStyle(
-                                                    fontFamily: 'Kodchasan')),
-                                          )),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            if (!_validateEmailform
-                                                .currentState!
-                                                .validate()) {
-                                              return;
+                                        fontFamily: 'Kodchasan',
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.black54),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Form(
+                                    key: _validateEmailform,
+                                    child: Row(
+                                      children: [
+                                        const Icon(Icons.alternate_email),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Expanded(
+                                            child: TextFormField(
+                                          controller:
+                                              emailValidatorController,
+                                          validator: (value) {
+                                            if (value!.isNotEmpty &&
+                                                emailValidatorController
+                                                        .text ==
+                                                    email) {
+                                              return null;
+                                            } else {
+                                              return 'enter valid email id';
                                             }
-                                            dialogBox(context);
-                                            setState(() {
-                                              isVisible = !isVisible;
-                                            });
                                           },
-                                          child: Text('Submit ',
-                                              style: TextStyle(
-                                                  fontFamily: 'kodachan',
-                                                  fontSize: 19)),
+                                          decoration: const InputDecoration(
+                                              hintText: 'Email ID',
+                                              hintStyle: TextStyle(
+                                                  fontFamily: 'Kodchasan')),
                                         )),
-                                  ],
-                                ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  SizedBox(
+                                      width:
+                                          MediaQuery.of(context).size.width,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          if (!_validateEmailform
+                                              .currentState!
+                                              .validate()) {
+                                            return;
+                                          }
+                                          dialogBox(context);
+                                          setState(() {
+                                            isVisible = !isVisible;
+                                          });
+                                        },
+                                        child: const Text('Submit ',
+                                            style: TextStyle(
+                                                fontFamily: 'kodachan',
+                                                fontSize: 19)),
+                                      )),
+                                ],
                               ),
                             ),
-                          )
-                        ],
-                      ),
+                          ),
+                        )
+                      ],
                     ),
                   ),
                 )
@@ -274,7 +275,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
                     children: [
-                      Text(
+                      const Text(
                         'Reset Password',
                         style: TextStyle(
                             fontFamily: 'Kodchasan',
@@ -282,37 +283,38 @@ class _LoginScreenState extends State<LoginScreen> {
                             fontWeight: FontWeight.w700,
                             color: Colors.black54),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Row(
                         children: [
-                          Icon(Icons.key),
-                          SizedBox(
+                          const Icon(Icons.key),
+                          const SizedBox(
                             width: 10,
                           ),
                           Expanded(
                               child: TextFormField(
                             validator: (value) {
-                              if (value!.isNotEmpty)
+                              if (value!.isNotEmpty) {
                                 return null;
-                              else
+                              } else {
                                 return 'enter new password';
+                              }
                             },
                             controller: newPassword,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                                 hintText: 'New Password',
                                 hintStyle: TextStyle(fontFamily: 'Kodchasan')),
                           )),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Row(
                         children: [
                           Icon(Icons.key),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Expanded(
@@ -328,13 +330,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               }
                             },
                             controller: oldPassword,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                                 hintText: 'Confirm Password',
                                 hintStyle: TextStyle(fontFamily: 'Kodchasan')),
                           )),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       SizedBox(
@@ -343,10 +345,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             onPressed: () {
                               if (!_resetPasswordKey.currentState!.validate()) {
                                 return;
-                              } else
+                              } else {
                                 Navigator.pop(context);
+                              }
                             },
-                            child: Text('Submit ',
+                            child: const Text('Submit ',
                                 style: TextStyle(
                                     fontFamily: 'kodachan', fontSize: 19)),
                           )),

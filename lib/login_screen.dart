@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:foodyguru_loginscreen/home_screen.dart';
+import 'package:foodyguru_loginscreen/widgets/custom_textfield.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 String password = 'password';
-String checkPassword = '';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -18,11 +18,26 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _validateEmailform = GlobalKey<FormState>();
   late SharedPreferences prefs;
 
+  //-------validators------------
+  String? customPasswordValidtaor(String? fieldContent) =>
+      fieldContent!.isEmpty ? 'please enter password' : null;
+  String? customEmailValidtaor(String? fieldContent) {
+    if (fieldContent!.isNotEmpty && emailController.text == email) {
+      return null;
+    } else if (fieldContent.isEmpty) {
+      return 'enter your email address';
+    } else {
+      return 'email is incorrect';
+    }
+  }
+  //-----------------------
+
   String email = 'aslah@gmail.com';
+
   TextEditingController emailController = TextEditingController();
   TextEditingController emailValidatorController = TextEditingController();
-
   TextEditingController passwordController = TextEditingController();
+
   bool isVisible = false;
   @override
   Widget build(BuildContext context) {
@@ -34,17 +49,13 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(
-                  height: 20,
-                ),
+                sizedBox(20, 0),
                 SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: Lottie.asset(
                         'asset/animation/83168-login-success.json',
                         height: 250)),
-                const SizedBox(
-                  height: 20,
-                ),
+                sizedBox(20, 0),
                 Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Form(
@@ -52,78 +63,24 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children:const [
-                            Text(
-                              'Login',
-                              style: TextStyle(
-                                  fontFamily: 'Kodchasan',
-                                  fontSize: 40,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.black54),
-                            ),
-                          ],
+                        heading("Login", 40, MainAxisAlignment.start),
+                        sizedBox(25, 0),
+                        CustomTextfield(
+                          controller: emailController,
+                          validator: customEmailValidtaor,
+                          isTextObscured: false,
+                          hintText: 'email is aslah@gmail.com',
+                          leadingIcon: Icons.alternate_email,
                         ),
-                        const SizedBox(
-                          height: 25,
+                        sizedBox(13, 0),
+                        CustomTextfield(
+                          controller: passwordController,
+                          validator: customPasswordValidtaor,
+                          isTextObscured: true,
+                          hintText: 'Password',
+                          leadingIcon: Icons.key,
                         ),
-                        Row(
-                          children: [
-                            const Icon(Icons.alternate_email),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Expanded(
-                                child: TextFormField(
-                              validator: (value) {
-                                if (value!.isNotEmpty &&
-                                    emailController.text == email) {
-                                  return null;
-                                } else if (value.isEmpty) {
-                                  return 'enter your email address';
-                                } else {
-                                  return 'email is incorrect';
-                                }
-                              },
-                              controller: emailController,
-                              decoration: const InputDecoration(
-                                  hintText: 'Email ID',
-                                  hintStyle:
-                                      TextStyle(fontFamily: 'Kodchasan')),
-                            )),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 13,
-                        ),
-                        Row(
-                          children: [
-                            const Icon(Icons.key),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Expanded(
-                                child: TextFormField(
-                              validator: (value) {
-                                if (value!.isNotEmpty) {
-                                  return null;
-                                } else {
-                                  return 'enter your password';
-                                }
-                              },
-                              obscureText: true,
-                              controller: passwordController,
-                              decoration: const InputDecoration(
-                                  hintText: 'Password',
-                                  hintStyle:
-                                      TextStyle(fontFamily: 'kodachan')),
-                            )),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
+                        sizedBox(15, 0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -139,113 +96,20 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ))
                           ],
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ),
+                        sizedBox(10, 0),
                         SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                if (!_formkey.currentState!.validate()) {
-                                  return;
-                                }
-                                prefs = await SharedPreferences.getInstance();
-
-                                final pass = prefs.getString(password);
-                               
-                                if (emailController.text == email &&
-                                    pass == passwordController.text) {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const HomeScreen()));
-                                }
-                              },
-                              child: const Text('Log in ',
-                                  style: TextStyle(
-                                      fontFamily: 'kodachan', fontSize: 19)),
-                            )),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Visibility(
-                          visible: isVisible,
-                          child: Container(
-                            color: Color.fromARGB(255, 222, 221, 221),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Column(
-                                children: [
-                                  const Text(
-                                    'Validate Email',
-                                    style: TextStyle(
-                                        fontFamily: 'Kodchasan',
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w700,
-                                        color: Colors.black54),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Form(
-                                    key: _validateEmailform,
-                                    child: Row(
-                                      children: [
-                                        const Icon(Icons.alternate_email),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Expanded(
-                                            child: TextFormField(
-                                          controller:
-                                              emailValidatorController,
-                                          validator: (value) {
-                                            if (value!.isNotEmpty &&
-                                                emailValidatorController
-                                                        .text ==
-                                                    email) {
-                                              return null;
-                                            } else {
-                                              return 'enter valid email id';
-                                            }
-                                          },
-                                          decoration: const InputDecoration(
-                                              hintText: 'Email ID',
-                                              hintStyle: TextStyle(
-                                                  fontFamily: 'Kodchasan')),
-                                        )),
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  SizedBox(
-                                      width:
-                                          MediaQuery.of(context).size.width,
-                                      child: ElevatedButton(
-                                        onPressed: () {
-                                          if (!_validateEmailform
-                                              .currentState!
-                                              .validate()) {
-                                            return;
-                                          }
-                                          dialogBox(context);
-                                          setState(() {
-                                            isVisible = !isVisible;
-                                          });
-                                        },
-                                        child: const Text('Submit ',
-                                            style: TextStyle(
-                                                fontFamily: 'kodachan',
-                                                fontSize: 19)),
-                                      )),
-                                ],
-                              ),
-                            ),
+                          width: MediaQuery.of(context).size.width,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              loginButtonMethod();
+                            },
+                            child: const Text('Login ',
+                                style: TextStyle(
+                                    fontFamily: 'kodachan', fontSize: 19)),
                           ),
-                        )
+                        ),
+                        sizedBox(20, 0),
+                        hiddenEmailValidationSection(context)
                       ],
                     ),
                   ),
@@ -258,9 +122,111 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  Visibility hiddenEmailValidationSection(BuildContext context) {
+    String? hiddenEmailValidator(String? fieldContent) {
+      if (fieldContent!.isNotEmpty && emailValidatorController.text == email) {
+        return null;
+      } else {
+        return 'enter valid email id';
+      }
+    }
+
+    return Visibility(
+      visible: isVisible,
+      child: Container(
+        color: const Color.fromARGB(255, 222, 221, 221),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              heading('Validate Email', 20, MainAxisAlignment.center),
+              sizedBox(10, 0),
+              Form(
+                  key: _validateEmailform,
+                  child: CustomTextfield(
+                      controller: emailValidatorController,
+                      validator: hiddenEmailValidator,
+                      isTextObscured: false,
+                      leadingIcon: Icons.alternate_email,
+                      hintText: 'Email')),
+              sizedBox(10, 0),
+              SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (!_validateEmailform.currentState!.validate()) {
+                        return;
+                      }
+                      dialogBox(context);
+                      setState(() {
+                        isVisible = !isVisible;
+                      });
+                    },
+                    child: const Text('Submit ',
+                        style: TextStyle(fontFamily: 'kodachan', fontSize: 19)),
+                  )),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Row heading(String heading, double fontSize, alignment) {
+    return Row(
+      mainAxisAlignment: alignment,
+      children: [
+        Text(
+          heading,
+          style: TextStyle(
+              fontFamily: 'Kodchasan',
+              fontSize: fontSize,
+              fontWeight: FontWeight.w700,
+              color: Colors.black54),
+        ),
+      ],
+    );
+  }
+
+  SizedBox sizedBox(double heightSpace, double widthSpace) {
+    return SizedBox(height: heightSpace, width: widthSpace);
+  }
+
+  void loginButtonMethod() async {
+    if (!_formkey.currentState!.validate()) {
+      return;
+    }
+    prefs = await SharedPreferences.getInstance();
+
+    final pass = prefs.getString(password);
+
+    if (emailController.text == email && pass == passwordController.text) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+    }
+  }
+
   Future<dynamic> dialogBox(BuildContext context) {
-    TextEditingController newPassword = TextEditingController();
-    TextEditingController oldPassword = TextEditingController();
+    TextEditingController newPasswordController = TextEditingController();
+    TextEditingController oldPasswordController = TextEditingController();
+
+    String? customNewPasswordValidator(String? fieldContent) {
+      if (fieldContent!.isNotEmpty) {
+        return null;
+      } else {
+        return 'enter new password';
+      }
+    }
+
+    String? customConfirmPasswordValidator(String? fieldContent) {
+      if (fieldContent!.isNotEmpty && newPasswordController.text == oldPasswordController.text) {
+        save(newPasswordController);
+        return null;
+      } else {
+        return 'enterd password does not match';
+      }
+    }
+
     final GlobalKey<FormState> _resetPasswordKey = GlobalKey<FormState>();
 
     return showDialog(
@@ -275,68 +241,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
                     children: [
-                      const Text(
-                        'Reset Password',
-                        style: TextStyle(
-                            fontFamily: 'Kodchasan',
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black54),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: [
-                          const Icon(Icons.key),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                              child: TextFormField(
-                            validator: (value) {
-                              if (value!.isNotEmpty) {
-                                return null;
-                              } else {
-                                return 'enter new password';
-                              }
-                            },
-                            controller: newPassword,
-                            decoration: const InputDecoration(
-                                hintText: 'New Password',
-                                hintStyle: TextStyle(fontFamily: 'Kodchasan')),
-                          )),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: [
-                          Icon(Icons.key),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                              child: TextFormField(
-                            validator: (value) {
-                              if (value!.isNotEmpty &&
-                                  newPassword.text == oldPassword.text) {
-                                save(newPassword);
-
-                                return null;
-                              } else {
-                                return 'entered password correctly';
-                              }
-                            },
-                            controller: oldPassword,
-                            decoration: const InputDecoration(
-                                hintText: 'Confirm Password',
-                                hintStyle: TextStyle(fontFamily: 'Kodchasan')),
-                          )),
-                        ],
-                      ),
-                      const SizedBox(
+                      heading('Reset Password', 20, MainAxisAlignment.center),
+                      sizedBox(10, 0),
+                      CustomTextfield(
+                          controller: newPasswordController,
+                          validator: customNewPasswordValidator,
+                          isTextObscured: false,
+                          leadingIcon: Icons.key,
+                          hintText: 'Enter New Password'),
+                      sizedBox(10, 0),
+                      
+                      CustomTextfield(controller: oldPasswordController, validator: customConfirmPasswordValidator, isTextObscured: false, leadingIcon: Icons.key, hintText: 'Confirm password')
+                      ,const SizedBox(
                         height: 20,
                       ),
                       SizedBox(
@@ -365,6 +281,5 @@ class _LoginScreenState extends State<LoginScreen> {
   save(TextEditingController controller) async {
     prefs = await SharedPreferences.getInstance();
     prefs.setString(password, controller.text.toString());
-   
   }
 }

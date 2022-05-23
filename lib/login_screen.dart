@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodyguru_loginscreen/home_screen.dart';
+import 'package:foodyguru_loginscreen/widgets/custom_button.dart';
 import 'package:foodyguru_loginscreen/widgets/custom_textfield.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -97,16 +98,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           ],
                         ),
                         sizedBox(10, 0),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              loginButtonMethod();
-                            },
-                            child: const Text('Login ',
-                                style: TextStyle(
-                                    fontFamily: 'kodachan', fontSize: 19)),
-                          ),
+                        CustomButton(
+                          customFunction: loginButtonMethod,
+                          buttonName: 'Login',
                         ),
                         sizedBox(20, 0),
                         hiddenEmailValidationSection(context)
@@ -150,21 +144,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       leadingIcon: Icons.alternate_email,
                       hintText: 'Email')),
               sizedBox(10, 0),
-              SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (!_validateEmailform.currentState!.validate()) {
-                        return;
-                      }
-                      dialogBox(context);
-                      setState(() {
-                        isVisible = !isVisible;
-                      });
-                    },
-                    child: const Text('Submit ',
-                        style: TextStyle(fontFamily: 'kodachan', fontSize: 19)),
-                  )),
+              CustomButton(
+                customFunction: validateEmail,
+                buttonName: 'Validate',
+              )
             ],
           ),
         ),
@@ -192,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return SizedBox(height: heightSpace, width: widthSpace);
   }
 
-  void loginButtonMethod() async {
+  loginButtonMethod() async {
     if (!_formkey.currentState!.validate()) {
       return;
     }
@@ -204,6 +187,16 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => const HomeScreen()));
     }
+  }
+
+  validateEmail() {
+    if (!_validateEmailform.currentState!.validate()) {
+      return;
+    }
+    dialogBox(context);
+    setState(() {
+      isVisible = !isVisible;
+    });
   }
 
   Future<dynamic> dialogBox(BuildContext context) {
@@ -219,15 +212,23 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     String? customConfirmPasswordValidator(String? fieldContent) {
-      if (fieldContent!.isNotEmpty && newPasswordController.text == oldPasswordController.text) {
+      if (fieldContent!.isNotEmpty &&
+          newPasswordController.text == oldPasswordController.text) {
         save(newPasswordController);
         return null;
       } else {
-        return 'enterd password does not match';
+        return 'entered password does not match';
       }
     }
 
     final GlobalKey<FormState> _resetPasswordKey = GlobalKey<FormState>();
+    resetPassword() {
+      if (!_resetPasswordKey.currentState!.validate()) {
+        return;
+      } else {
+        Navigator.pop(context);
+      }
+    }
 
     return showDialog(
         context: context,
@@ -250,25 +251,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           leadingIcon: Icons.key,
                           hintText: 'Enter New Password'),
                       sizedBox(10, 0),
-                      
-                      CustomTextfield(controller: oldPasswordController, validator: customConfirmPasswordValidator, isTextObscured: false, leadingIcon: Icons.key, hintText: 'Confirm password')
-                      ,const SizedBox(
+                      CustomTextfield(
+                          controller: oldPasswordController,
+                          validator: customConfirmPasswordValidator,
+                          isTextObscured: false,
+                          leadingIcon: Icons.key,
+                          hintText: 'Confirm password'),
+                      const SizedBox(
                         height: 20,
                       ),
-                      SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              if (!_resetPasswordKey.currentState!.validate()) {
-                                return;
-                              } else {
-                                Navigator.pop(context);
-                              }
-                            },
-                            child: const Text('Submit ',
-                                style: TextStyle(
-                                    fontFamily: 'kodachan', fontSize: 19)),
-                          )),
+                      CustomButton(customFunction: resetPassword, buttonName: 'Submit')
                     ],
                   ),
                 ),
